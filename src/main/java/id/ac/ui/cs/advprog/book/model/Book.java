@@ -20,11 +20,18 @@ public class Book {
     private int page;
     private String desc;
 
-    //title cannot be null
-    public void setTitle(String title) {
-        if (title == null) {
-            throw new IllegalArgumentException("Title cannot be null");
-        }
-        this.title = title;
+    Book(BookBuilder builder) {
+        this.idBook = builder.getIdBook();
+        this.title = builder.getTitle();
+        this.author = builder.getAuthor();
+        this.publisher = builder.getPublisher();
+        this.price = builder.getPrice();
+        this.stock = builder.getStock();
+        this.isbn = builder.getIsbn();
+        this.bookPict = builder.getBookPict();
+        this.publishDate = builder.getPublishDate();
+        this.category = builder.getCategory();
+        this.page = builder.getPage();
+        this.desc = builder.getDesc();
     }
 }
