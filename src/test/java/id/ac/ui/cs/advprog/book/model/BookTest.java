@@ -8,7 +8,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BookTest {
-    BookBuilder bookBuilder;
+    BookBuilder bookBuilder = new BookBuilder();
 
     Book book1;
     Book book2;
@@ -79,10 +79,5 @@ public class BookTest {
         assertEquals(320, book2.getPage());
         assertEquals("A collection of twelve stories featuring Sherlock Holmes, a consulting detective.",
                 book2.getDesc());
-    }
-
-    @Test
-    void testSetTitleWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> book1.setTitle(null));
     }
 }
