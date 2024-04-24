@@ -13,7 +13,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BookRepositoryTest {
-    BookRepository bookRepository;
+    BookRepository bookRepository = new BookRepository();
     BookBuilder bookBuilder = new BookBuilder();
 
     Book book1;
@@ -26,7 +26,6 @@ class BookRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        BookRepository bookRepository = new BookRepository();
         book1 =
                 bookBuilder.setIdBook(1)
                 .setTitle("Sampo Cap Bambang")
@@ -41,6 +40,7 @@ class BookRepositoryTest {
                 .setPage(50)
                 .setDesc("A children's book about Sampo Cap Bambang adventures.")
                 .build();
+        books.add(book1);
 
         book2 = bookBuilder.setIdBook(2)
                 .setTitle("The Adventures of Sherlock Holmes")
@@ -54,7 +54,8 @@ class BookRepositoryTest {
                 .setCategory("Mystery")
                 .setPage(320)
                 .setDesc("A collection of twelve stories featuring Sherlock Holmes, a consulting detective.")
-                .build();        
+                .build();      
+        books.add(book2);  
     }
 
     @Test
