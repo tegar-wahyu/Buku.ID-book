@@ -67,4 +67,14 @@ public class BookBuilderTest {
                     .build();
         });
     }
+
+    @Test
+    void testBuildBookWithMissingAuthor() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            bookBuilder
+                    .setTitle("Buku Pak Bambang")
+                    .setPrice(10.99f)
+                    .build();
+        });
+    }
 }
