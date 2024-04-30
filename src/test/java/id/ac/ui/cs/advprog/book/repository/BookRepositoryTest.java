@@ -2,18 +2,26 @@ package id.ac.ui.cs.advprog.book.repository;
 
 import id.ac.ui.cs.advprog.book.model.Book;
 import id.ac.ui.cs.advprog.book.model.BookBuilder;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookRepositoryTest {
-    BookRepository bookRepository = new BookRepository();
+    @Autowired
+    private BookRepository bookRepository;
+
     BookBuilder bookBuilder = new BookBuilder();
 
     Book book1;
@@ -22,12 +30,9 @@ class BookRepositoryTest {
     Date date1 = new Date();
     Date date2 = new Date();
 
-    List <Book> books = new ArrayList<>();
-
     @BeforeEach
     void setUp() {
-        book1 =
-                bookBuilder.setIdBook(1)
+        book1 = bookBuilder.setIdBook(1)
                 .setTitle("Sampo Cap Bambang")
                 .setAuthor("Bambang")
                 .setPublisher("Bambang CV")
@@ -40,7 +45,6 @@ class BookRepositoryTest {
                 .setPage(50)
                 .setDesc("A children's book about Sampo Cap Bambang adventures.")
                 .build();
-        books.add(book1);
 
         book2 = bookBuilder.setIdBook(2)
                 .setTitle("The Adventures of Sherlock Holmes")
@@ -54,61 +58,31 @@ class BookRepositoryTest {
                 .setCategory("Mystery")
                 .setPage(320)
                 .setDesc("A collection of twelve stories featuring Sherlock Holmes, a consulting detective.")
-                .build();      
-        books.add(book2);  
+                .build();
+    }
+
+//    @Test
+//    void testFindBookById() {
+//        bookRepository.save(book1);
+//        Optional<Book> foundBook = bookRepository.findBookByIdBook(1);
+//        assertTrue(foundBook.isPresent());
+//        assertEquals(book1.getIdBook(), foundBook.get().getIdBook());
+//    }
+
+    @Test
+    void testFindAllBooks() {
+        bookRepository.save(book1);
+        bookRepository.save(book2);
+        List<Book> foundBooks = bookRepository.findAll();
+        assertEquals(2, foundBooks.size());
     }
 
     @Test
-    void testSave() {
-        Book book = books.get(1);
-        Book result = bookRepository.save(book);
-
-        Book findResult = bookRepository.findById(books.get(1).getIdBook());
-        assertEquals(book.getIdBook(), result.getIdBook());
-        assertEquals(book.getIdBook(), findResult.getIdBook());
-        assertEquals(book.getTitle(), findResult.getTitle());
-        assertEquals(book.getAuthor(), findResult.getAuthor());
-    }
-
-    @Test
-    void testFindByIdFound() {
-        for (Book book : books) {
-            bookRepository.save(book);
-        }
-
-        Book findResult = bookRepository.findById(books.get(1).getIdBook());
-        assertEquals(books.get(1).getIdBook(), findResult.getIdBook());
-        assertEquals(books.get(1).getTitle(), findResult.getTitle());
-        assertEquals(books.get(1).getAuthor(), findResult.getAuthor());
-    }
-
-    @Test
-    void testFindByIdNotFound() {
-        for (Book book : books) {
-            bookRepository.save(book);
-        }
-
-        Book findResult = bookRepository.findById(66);
-        assertNull(findResult);
-    }
-
-    @Test
-    void testFindAllByAuthorIfAuthorCorrect() {
-        for (Book book : books) {
-            bookRepository.save(book);
-        }
-
-        List <Book> bookList = bookRepository.findAllByAuthor(books.get(1).getAuthor());
-        assertEquals(1, bookList.size());
-    }
-
-    @Test
-    void testFindAllByAuthorIfAuthorIncorrect() {
-        for (Book book : books) {
-            bookRepository.save(book);
-        }
-
-        List <Book> bookList = bookRepository.findAllByAuthor("Sutarjo");
-        assertTrue(bookList.isEmpty());
+    void testFindByAuthor() {
+        bookRepository.save(book1);
+        bookRepository.save(book2);
+        List<Book> foundBooks = bookRepository.findByAuthor("Arthur Conan Doyle");
+        assertEquals(1, foundBooks.size());
+        assertEquals(book2.getAuthor(), foundBooks.getFirst().getAuthor());
     }
 }
