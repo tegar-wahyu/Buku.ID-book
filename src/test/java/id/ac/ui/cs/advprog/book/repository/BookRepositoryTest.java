@@ -15,8 +15,12 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+//@SpringBootTest
 @DataJpaTest
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookRepositoryTest {
     @Autowired
