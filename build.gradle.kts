@@ -42,6 +42,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("net.datafaker:datafaker:1.5.0")
 	runtimeOnly("org.postgresql:postgresql")
+  testImplementation("com.h2database:h2")
 }
 
 tasks.register<Test>("unitTest") {
