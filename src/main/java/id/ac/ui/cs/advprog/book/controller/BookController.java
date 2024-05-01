@@ -46,4 +46,14 @@ public class BookController {
         List<Book> books = bookService.getBooksByAuthor(author);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Book> editBook(@PathVariable("id") int idBook, @RequestBody Book updatedBook) {
+        Book editedBook = bookService.editBook(idBook, updatedBook);
+        if (editedBook != null) {
+            return new ResponseEntity<>(editedBook, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

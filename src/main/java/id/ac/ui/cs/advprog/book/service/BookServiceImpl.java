@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.book.service;
 
 import id.ac.ui.cs.advprog.book.model.Book;
+import id.ac.ui.cs.advprog.book.model.BookBuilder;
 import id.ac.ui.cs.advprog.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,30 @@ public class BookServiceImpl implements BookService {
 
     public List<Book> getBooksByAuthor(String author) {
         return bookRepository.findByAuthor(author);
+    }
+
+    public Book editBook(int idBook, Book updatedBook) {
+        Optional<Book> existingBook = bookRepository.findBookByIdBook(idBook);
+        if (existingBook.isPresent()) {
+            Book bookToUpdate = existingBook.get();
+            BookBuilder bookBuilder = new BookBuilder()
+                    .setIdBook(bookToUpdate.getIdBook())
+                    .setTitle(updatedBook.getTitle())
+                    .setAuthor(updatedBook.getAuthor())
+                    .setPublisher(updatedBook.getPublisher())
+                    .setPrice(updatedBook.getPrice())
+                    .setStock(updatedBook.getStock())
+                    .setIsbn(updatedBook.getIsbn())
+                    .setBookPict(updatedBook.getBookPict())
+                    .setPublishDate(updatedBook.getPublishDate())
+                    .setCategory(updatedBook.getCategory())
+                    .setPage(updatedBook.getPage())
+                    .setDesc(updatedBook.getDesc());
+
+            Book updatedBookObj = bookBuilder.build();
+            return bookRepository.save(updatedBookObj);
+        } else {
+            return null;
+        }
     }
 }

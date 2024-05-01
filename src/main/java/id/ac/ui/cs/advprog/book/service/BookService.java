@@ -17,4 +17,6 @@ public interface BookService {
     public void deleteBook(int idBook);
 
     public List<Book> getBooksByAuthor(String author);
+
+    public Book editBook(int idBook, Book updatedBook);
 }
