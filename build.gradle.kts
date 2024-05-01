@@ -39,10 +39,10 @@ dependencies {
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("com.h2database:h2")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("net.datafaker:datafaker:1.5.0")
 	runtimeOnly("org.postgresql:postgresql")
-  testImplementation("com.h2database:h2")
 }
 
 tasks.register<Test>("unitTest") {
