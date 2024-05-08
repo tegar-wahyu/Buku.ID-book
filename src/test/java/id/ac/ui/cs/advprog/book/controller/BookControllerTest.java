@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -33,9 +34,10 @@ class BookControllerTest {
     @Test
     void testSaveBook() {
         Book book = new Book();
-        when(bookService.saveBook(book)).thenReturn(book);
+        CompletableFuture<Book> futureBook = CompletableFuture.completedFuture(book);
+        when(bookService.saveBook(book)).thenReturn(futureBook);
 
-        ResponseEntity<Book> responseEntity = bookController.saveBook(book);
+        ResponseEntity<Book> responseEntity = bookController.saveBook(book).join();
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(book, responseEntity.getBody());
@@ -47,9 +49,10 @@ class BookControllerTest {
         int idBook = 1;
         Book book = new Book();
         book.setIdBook(idBook);
-        when(bookService.getBookById(idBook)).thenReturn(Optional.of(book));
+        CompletableFuture<Optional<Book>> futureOptionalBook = CompletableFuture.completedFuture(Optional.of(book));
+        when(bookService.getBookById(idBook)).thenReturn(futureOptionalBook);
 
-        ResponseEntity<Book> responseEntity = bookController.getBookById(idBook);
+        ResponseEntity<Book> responseEntity = bookController.getBookById(idBook).join();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(book, responseEntity.getBody());
@@ -58,9 +61,10 @@ class BookControllerTest {
     @Test
     void testGetBookById_WhenBookNotExists() {
         int idBook = 1;
-        when(bookService.getBookById(idBook)).thenReturn(Optional.empty());
+        CompletableFuture<Optional<Book>> futureEmptyOptional = CompletableFuture.completedFuture(Optional.empty());
+        when(bookService.getBookById(idBook)).thenReturn(futureEmptyOptional);
 
-        ResponseEntity<Book> responseEntity = bookController.getBookById(idBook);
+        ResponseEntity<Book> responseEntity = bookController.getBookById(idBook).join();
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
@@ -70,9 +74,10 @@ class BookControllerTest {
         List<Book> books = new ArrayList<>();
         books.add(new Book());
         books.add(new Book());
-        when(bookService.getAllBooks()).thenReturn(books);
+        CompletableFuture<List<Book>> futureBooks = CompletableFuture.completedFuture(books);
+        when(bookService.getAllBooks()).thenReturn(futureBooks);
 
-        ResponseEntity<List<Book>> responseEntity = bookController.getAllBooks();
+        ResponseEntity<List<Book>> responseEntity = bookController.getAllBooks().join();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(books, responseEntity.getBody());
@@ -81,7 +86,10 @@ class BookControllerTest {
     @Test
     void testDeleteBook() {
         int idBook = 1;
-        ResponseEntity<Void> responseEntity = bookController.deleteBook(idBook);
+        CompletableFuture<Void> futureVoid = CompletableFuture.completedFuture(null);
+        when(bookService.deleteBook(idBook)).thenReturn(futureVoid);
+
+        ResponseEntity<Void> responseEntity = bookController.deleteBook(idBook).join();
 
         assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
         verify(bookService, times(1)).deleteBook(idBook);
@@ -93,9 +101,10 @@ class BookControllerTest {
         List<Book> books = new ArrayList<>();
         books.add(new Book());
         books.add(new Book());
-        when(bookService.getBooksByAuthor(author)).thenReturn(books);
+        CompletableFuture<List<Book>> futureBooks = CompletableFuture.completedFuture(books);
+        when(bookService.getBooksByAuthor(author)).thenReturn(futureBooks);
 
-        ResponseEntity<List<Book>> responseEntity = bookController.getBooksByAuthor(author);
+        ResponseEntity<List<Book>> responseEntity = bookController.getBooksByAuthor(author).join();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(books, responseEntity.getBody());
