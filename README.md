@@ -40,6 +40,13 @@ Responsible for this service are [Restu Ahmad Ar Ridho](https://github.com/restu
 
 Access the service here: [Buku.ID-book Deployment](http://34.168.74.25)
 
+## Component Diagram
+![Component Diagram](https://github.com/TK-Advance-Programming-A7/Buku.ID-book/assets/127276012/ac61f98d-b297-49a8-8b72-4de5f71e2862)
+
+
+
+## Code Diagram
+![Code Diagram](https://github.com/TK-Advance-Programming-A7/Buku.ID-book/assets/127276012/89aef38c-305e-4e6f-9e1d-3984fbf77e7e)
 
 --------------------------------------------------------------------------------------------
 *© Kelompok A7, Fakultas Ilmu Komputer, Universitas Indonesia - 2023/2024*
