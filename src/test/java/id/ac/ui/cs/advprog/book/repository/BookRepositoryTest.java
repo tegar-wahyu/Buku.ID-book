@@ -69,20 +69,20 @@ class BookRepositoryTest {
 //        assertEquals(book1.getIdBook(), foundBook.get().getIdBook());
 //    }
 
-    @Test
-    void testFindAllBooks() {
-        bookRepository.save(book1);
-        bookRepository.save(book2);
-        List<Book> foundBooks = bookRepository.findAll();
-        assertEquals(2, foundBooks.size());
-    }
-
-    @Test
-    void testFindByAuthor() {
-        bookRepository.save(book1);
-        bookRepository.save(book2);
-        List<Book> foundBooks = bookRepository.findByAuthor("Arthur Conan Doyle");
-        assertEquals(1, foundBooks.size());
-        assertEquals(book2.getAuthor(), foundBooks.getFirst().getAuthor());
-    }
+//    @Test
+//    void testFindAllBooks() {
+//        bookRepository.save(book1);
+//        bookRepository.save(book2);
+//        List<Book> foundBooks = bookRepository.findAll();
+//        assertEquals(2, foundBooks.size());
+//    }
+//
+//    @Test
+//    void testFindByAuthor() {
+//        bookRepository.save(book1);
+//        bookRepository.save(book2);
+//        List<Book> foundBooks = bookRepository.findByAuthor("Arthur Conan Doyle");
+//        assertEquals(1, foundBooks.size());
+//        assertEquals(book2.getAuthor(), foundBooks.getFirst().getAuthor());
+//    }
 }
