@@ -37,9 +37,6 @@
              if (desc.length() > 255) {
                  desc = desc.substring(0, 255);
              }
-             if (bookPict.length() > 255) {
-                 bookPict = bookPict.substring(0, 255);
-             }
 
              Book book = new BookBuilder()
                      .setTitle(title)
