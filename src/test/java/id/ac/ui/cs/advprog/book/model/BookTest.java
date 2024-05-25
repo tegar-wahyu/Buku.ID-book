@@ -2,11 +2,13 @@ package id.ac.ui.cs.advprog.book.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("test")
 public class BookTest {
     BookBuilder bookBuilder = new BookBuilder();
 
