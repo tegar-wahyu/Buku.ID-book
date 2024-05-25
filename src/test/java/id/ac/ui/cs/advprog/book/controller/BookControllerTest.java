@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookControllerTest {
 
     @Mock
@@ -123,20 +125,20 @@ class BookControllerTest {
         verify(bookService, times(1)).deleteBook(idBook);
     }
 
-//    @Test
-//    void testGetBooksByAuthor() {
-//        String author = "Test Author";
-//        List<Book> books = new ArrayList<>();
-//        books.add(new Book());
-//        books.add(new Book());
-//        CompletableFuture<List<Book>> futureBooks = CompletableFuture.completedFuture(books);
-//        when(bookService.getBooksByAuthor(author)).thenReturn(futureBooks);
-//
-//        ResponseEntity<List<Book>> responseEntity = bookController.getBooksByAuthor(author).join();
-//
-//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//        assertEquals(books, responseEntity.getBody());
-//    }
+    @Test
+    void testGetBooksByAuthor() {
+        String author = "Test Author";
+        List<Book> books = new ArrayList<>();
+        books.add(new Book());
+        books.add(new Book());
+        CompletableFuture<List<Book>> futureBooks = CompletableFuture.completedFuture(books);
+        when(bookService.getBooksByAuthor(author)).thenReturn(futureBooks);
+
+        ResponseEntity<List<Book>> responseEntity = bookController.getBooksByAuthor(author).join();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(books, responseEntity.getBody());
+    }
 
     @Test
     void testEditBook_WhenBookExists() {

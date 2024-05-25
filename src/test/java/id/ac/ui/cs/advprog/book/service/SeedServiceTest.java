@@ -1,25 +1,21 @@
 package id.ac.ui.cs.advprog.book.service;
 
 import id.ac.ui.cs.advprog.book.model.Book;
-import id.ac.ui.cs.advprog.book.model.BookBuilder;
 import id.ac.ui.cs.advprog.book.repository.BookRepository;
 import net.datafaker.Faker;
-import net.datafaker.Internet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class SeedServiceTest {
 
     @Mock
