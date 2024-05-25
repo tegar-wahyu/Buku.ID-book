@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -38,11 +39,17 @@ public class BookServiceImpl implements BookService {
     @Override
     @Async
     public CompletableFuture<Void> deleteBook(int idBook) {
-        Optional<Book> book = bookRepository.findBookByIdBook(idBook);
-        if (book.isPresent()) {
-            bookRepository.delete(book.get());
+        try {
+            Optional<Book> optionalBook = bookRepository.findBookByIdBook(idBook);
+            if (optionalBook.isPresent()) {
+                bookRepository.delete(optionalBook.get());
+            } else {
+                throw new NoSuchElementException("Book with id " + idBook + " not found");
+            }
+            return CompletableFuture.completedFuture(null);
+        } catch (Exception e) {
+            return CompletableFuture.failedFuture(e);
         }
-        return CompletableFuture.completedFuture(null);
     }
 
     @Override

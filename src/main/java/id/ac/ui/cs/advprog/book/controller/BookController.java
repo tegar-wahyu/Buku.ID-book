@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -37,9 +39,17 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public CompletableFuture<ResponseEntity<Void>> deleteBook(@PathVariable("id") int idBook) {
-        return bookService.deleteBook(idBook)
-                .thenApply(result -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+    public CompletableFuture<ResponseEntity<String>> deleteBook(@PathVariable("id") int idBook) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                bookService.deleteBook(idBook);
+                return new ResponseEntity<>("Book with id " + idBook + " has been deleted", HttpStatus.OK);
+            } catch (NoSuchElementException e) {
+                return new ResponseEntity<>("Book with id " + idBook + " not found", HttpStatus.NOT_FOUND);
+            } catch (Exception e) {
+                return new ResponseEntity<>("Failed to delete book with id " + idBook, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        });
     }
 
     @GetMapping("/author/{author}")
