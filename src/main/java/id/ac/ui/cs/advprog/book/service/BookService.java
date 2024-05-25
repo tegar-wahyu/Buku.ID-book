@@ -5,18 +5,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public interface BookService {
-    public Book saveBook(Book book);
-
-    public Optional<Book> getBookById(int idBook);
-
-    public List<Book> getAllBooks();
-
-    public void deleteBook(int idBook);
-
-    public List<Book> getBooksByAuthor(String author);
-
-    public Book editBook(int idBook, Book updatedBook);
+    CompletableFuture<Book> saveBook(Book book);
+    CompletableFuture<Optional<Book>> getBookById(int idBook);
+    CompletableFuture<List<Book>> getAllBooks();
+    CompletableFuture<Void> deleteBook(int idBook);
+    CompletableFuture<List<Book>> getBooksByAuthor(String author);
+    CompletableFuture<Book> editBook(int idBook, Book updatedBook);
 }

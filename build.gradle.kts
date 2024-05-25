@@ -43,6 +43,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("net.datafaker:datafaker:1.5.0")
 	runtimeOnly("org.postgresql:postgresql")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 }
 
 tasks.register<Test>("unitTest") {

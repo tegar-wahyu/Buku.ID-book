@@ -4,10 +4,13 @@ import id.ac.ui.cs.advprog.book.model.Book;
 import id.ac.ui.cs.advprog.book.model.BookBuilder;
 import id.ac.ui.cs.advprog.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -15,30 +18,49 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public Book saveBook(Book book) {
-        return bookRepository.save(book);
+    @Override
+    @Async
+    public CompletableFuture<Book> saveBook(Book book) {
+        return CompletableFuture.completedFuture(bookRepository.save(book));
     }
 
-    public Optional<Book> getBookById(int idBook) {
-        return bookRepository.findBookByIdBook(idBook);
+    @Override
+    @Async
+    public CompletableFuture<Optional<Book>> getBookById(int idBook) {
+        return CompletableFuture.completedFuture(bookRepository.findBookByIdBook(idBook));
     }
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    @Override
+    @Async
+    public CompletableFuture<List<Book>> getAllBooks() {
+        return CompletableFuture.completedFuture(bookRepository.findAll());
     }
 
-    public void deleteBook(int idBook) {
-        Optional<Book> book = bookRepository.findBookByIdBook(idBook);
-        if (book.isPresent()) {
-            bookRepository.delete(book.get());
+    @Override
+    @Async
+    public CompletableFuture<Void> deleteBook(int idBook) {
+        try {
+            Optional<Book> optionalBook = bookRepository.findBookByIdBook(idBook);
+            if (optionalBook.isPresent()) {
+                bookRepository.delete(optionalBook.get());
+            } else {
+                throw new NoSuchElementException("Book with id " + idBook + " not found");
+            }
+            return CompletableFuture.completedFuture(null);
+        } catch (Exception e) {
+            return CompletableFuture.failedFuture(e);
         }
     }
 
-    public List<Book> getBooksByAuthor(String author) {
-        return bookRepository.findByAuthor(author);
+    @Override
+    @Async
+    public CompletableFuture<List<Book>> getBooksByAuthor(String author) {
+        return CompletableFuture.completedFuture(bookRepository.findByAuthor(author));
     }
 
-    public Book editBook(int idBook, Book updatedBook) {
+    @Override
+    @Async
+    public CompletableFuture<Book> editBook(int idBook, Book updatedBook) {
         Optional<Book> existingBook = bookRepository.findBookByIdBook(idBook);
         if (existingBook.isPresent()) {
             Book bookToUpdate = existingBook.get();
@@ -57,9 +79,9 @@ public class BookServiceImpl implements BookService {
                     .setDesc(updatedBook.getDesc());
 
             Book updatedBookObj = bookBuilder.build();
-            return bookRepository.save(updatedBookObj);
+            return CompletableFuture.completedFuture(bookRepository.save(updatedBookObj));
         } else {
-            return null;
+            return CompletableFuture.completedFuture(null);
         }
     }
 }
