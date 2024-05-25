@@ -55,6 +55,14 @@ public class BookBuilderTest {
                     .setPrice(10.99f)
                     .build();
         });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            bookBuilder
+                    .setAuthor("Pak Bambang")
+                    .setPrice(10.99f)
+                    .setTitle("")
+                    .build();
+        });
     }
 
     @Test
@@ -74,6 +82,14 @@ public class BookBuilderTest {
             bookBuilder
                     .setTitle("Buku Pak Bambang")
                     .setPrice(10.99f)
+                    .build();
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            bookBuilder
+                    .setTitle("Buku Pak Bambang")
+                    .setPrice(10.99f)
+                    .setAuthor("")
                     .build();
         });
     }

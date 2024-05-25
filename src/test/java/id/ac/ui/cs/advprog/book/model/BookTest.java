@@ -80,4 +80,34 @@ public class BookTest {
         assertEquals("A collection of twelve stories featuring Sherlock Holmes, a consulting detective.",
                 book2.getDesc());
     }
+
+//    test setter
+    @Test
+    void testSetter() {
+        book1.setIdBook(3);
+        book1.setTitle("Sampo Cap Bambang 2");
+        book1.setAuthor("Bambang 2");
+        book1.setPublisher("Bambang CV 2");
+        book1.setPrice(20.99f);
+        book1.setStock(200);
+        book1.setIsbn("1234567891");
+        book1.setBookPict("sampo_cap_bambang_2.jpg");
+        book1.setPublishDate(date2);
+        book1.setCategory("Children's Books 2");
+        book1.setPage(100);
+        book1.setDesc("A children's book about Sampo Cap Bambang adventures. 2");
+
+        assertEquals(3, book1.getIdBook());
+        assertEquals("Sampo Cap Bambang 2", book1.getTitle());
+        assertEquals("Bambang 2", book1.getAuthor());
+        assertEquals("Bambang CV 2", book1.getPublisher());
+        assertEquals(20.99f, book1.getPrice());
+        assertEquals(200, book1.getStock());
+        assertEquals("1234567891", book1.getIsbn());
+        assertEquals("sampo_cap_bambang_2.jpg", book1.getBookPict());
+        assertEquals(date2, book1.getPublishDate());
+        assertEquals("Children's Books 2", book1.getCategory());
+        assertEquals(100, book1.getPage());
+        assertEquals("A children's book about Sampo Cap Bambang adventures. 2", book1.getDesc());
+    }
 }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -84,14 +85,39 @@ class BookControllerTest {
     }
 
     @Test
-    void testDeleteBook() {
+    void testDeleteBook_WhenBookExists() {
         int idBook = 1;
         CompletableFuture<Void> futureVoid = CompletableFuture.completedFuture(null);
         when(bookService.deleteBook(idBook)).thenReturn(futureVoid);
 
-        ResponseEntity<Void> responseEntity = bookController.deleteBook(idBook).join();
+        ResponseEntity<String> responseEntity = bookController.deleteBook(idBook).join();
 
-        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("Book with id " + idBook + " has been deleted", responseEntity.getBody());
+        verify(bookService, times(1)).deleteBook(idBook);
+    }
+
+    @Test
+    void testDeleteBook_WhenBookNotExists() {
+        int idBook = 1;
+        doThrow(new NoSuchElementException()).when(bookService).deleteBook(idBook);
+
+        ResponseEntity<String> responseEntity = bookController.deleteBook(idBook).join();
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals("Book with id " + idBook + " not found", responseEntity.getBody());
+        verify(bookService, times(1)).deleteBook(idBook);
+    }
+
+    @Test
+    void testDeleteBook_WhenExceptionOccurs() {
+        int idBook = 1;
+        doThrow(new RuntimeException()).when(bookService).deleteBook(idBook);
+
+        ResponseEntity<String> responseEntity = bookController.deleteBook(idBook).join();
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        assertEquals("Failed to delete book with id " + idBook, responseEntity.getBody());
         verify(bookService, times(1)).deleteBook(idBook);
     }
 
@@ -108,5 +134,34 @@ class BookControllerTest {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(books, responseEntity.getBody());
+    }
+
+    @Test
+    void testEditBook_WhenBookExists() {
+        int idBook = 1;
+        Book updatedBook = new Book();
+        updatedBook.setIdBook(idBook);
+        CompletableFuture<Book> futureEditedBook = CompletableFuture.completedFuture(updatedBook);
+        when(bookService.editBook(idBook, updatedBook)).thenReturn(futureEditedBook);
+
+        ResponseEntity<Book> responseEntity = bookController.editBook(idBook, updatedBook).join();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(updatedBook, responseEntity.getBody());
+        verify(bookService, times(1)).editBook(idBook, updatedBook);
+    }
+
+    @Test
+    void testEditBook_WhenBookNotExists() {
+        int idBook = 1;
+        Book updatedBook = new Book();
+        updatedBook.setIdBook(idBook);
+        CompletableFuture<Book> futureEmpty = CompletableFuture.completedFuture(null);
+        when(bookService.editBook(idBook, updatedBook)).thenReturn(futureEmpty);
+
+        ResponseEntity<Book> responseEntity = bookController.editBook(idBook, updatedBook).join();
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        verify(bookService, times(1)).editBook(idBook, updatedBook);
     }
 }

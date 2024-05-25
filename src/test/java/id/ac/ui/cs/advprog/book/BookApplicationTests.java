@@ -12,4 +12,8 @@ class BookApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void testMain() {
+		BookApplication.main(new String[]{"args"});
+	}
 }
