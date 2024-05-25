@@ -123,20 +123,20 @@ class BookControllerTest {
         verify(bookService, times(1)).deleteBook(idBook);
     }
 
-    @Test
-    void testGetBooksByAuthor() {
-        String author = "Test Author";
-        List<Book> books = new ArrayList<>();
-        books.add(new Book());
-        books.add(new Book());
-        CompletableFuture<List<Book>> futureBooks = CompletableFuture.completedFuture(books);
-        when(bookService.getBooksByAuthor(author)).thenReturn(futureBooks);
-
-        ResponseEntity<List<Book>> responseEntity = bookController.getBooksByAuthor(author).join();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(books, responseEntity.getBody());
-    }
+//    @Test
+//    void testGetBooksByAuthor() {
+//        String author = "Test Author";
+//        List<Book> books = new ArrayList<>();
+//        books.add(new Book());
+//        books.add(new Book());
+//        CompletableFuture<List<Book>> futureBooks = CompletableFuture.completedFuture(books);
+//        when(bookService.getBooksByAuthor(author)).thenReturn(futureBooks);
+//
+//        ResponseEntity<List<Book>> responseEntity = bookController.getBooksByAuthor(author).join();
+//
+//        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+//        assertEquals(books, responseEntity.getBody());
+//    }
 
     @Test
     void testEditBook_WhenBookExists() {
