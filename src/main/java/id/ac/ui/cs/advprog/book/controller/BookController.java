@@ -2,22 +2,23 @@ package id.ac.ui.cs.advprog.book.controller;
 
 import id.ac.ui.cs.advprog.book.model.Book;
 import id.ac.ui.cs.advprog.book.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @PostMapping
     public CompletableFuture<ResponseEntity<Book>> saveBook(@RequestBody Book book) {

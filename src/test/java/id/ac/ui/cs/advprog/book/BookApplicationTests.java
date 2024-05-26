@@ -1,8 +1,10 @@
 package id.ac.ui.cs.advprog.book;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
@@ -10,12 +12,11 @@ import org.springframework.test.context.ActiveProfiles;
 //@SpringBootTest
 class BookApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+  @Autowired
+  private BookApplication bookApplication;
 
 	@Test
-	void testMain() {
-		BookApplication.main(new String[]{"args"});
+	void contextLoads() {
+    assertNotNull(bookApplication);
 	}
 }

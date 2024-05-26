@@ -3,7 +3,6 @@ package id.ac.ui.cs.advprog.book.service;
 import id.ac.ui.cs.advprog.book.model.Book;
 import id.ac.ui.cs.advprog.book.model.BookBuilder;
 import id.ac.ui.cs.advprog.book.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,11 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class BookServiceImpl implements BookService {
+    private final BookRepository bookRepository;
 
-    @Autowired
-    private BookRepository bookRepository;
+    public BookServiceImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     @Override
     @Async

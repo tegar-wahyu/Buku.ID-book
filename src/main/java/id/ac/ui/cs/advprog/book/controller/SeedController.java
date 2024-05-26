@@ -1,6 +1,5 @@
 package id.ac.ui.cs.advprog.book.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -9,8 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SeedController {
-  @Autowired
-  private SeedService seedService;
+  private final SeedService seedService;
+
+  public SeedController(SeedService seedService) {
+    this.seedService = seedService;
+  }
 
   @GetMapping("/seed-data")
   public ResponseEntity<String> seedMaster() {
