@@ -133,27 +133,38 @@ jobs:
           docker build --build-arg PRODUCTION=${{ secrets.PRODUCTION }} --build-arg JDBC_DATABASE_PASSWORD=${{ secrets.JDBC_DATABASE_PASSWORD }} --build-arg JDBC_DATABASE_URL=${{ secrets.JDBC_DATABASE_URL }} --build-arg JDBC_DATABASE_USERNAME=${{ secrets.JDBC_DATABASE_USERNAME }} -t ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }} .
           docker push ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }}
 
-  deploy:
-    name: Deploy to GCP
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    needs: publish
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+deploy:
+  name: Deploy to GCP
+  runs-on: ubuntu-latest
+  if: github.ref == 'refs/heads/main'
+  needs: publish
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
-      - name: Install SSH client
-        run: sudo apt-get install openssh-client
+    - name: Install SSH client
+      run: sudo apt-get install openssh-client
 
-      - name: create ssh key
-        run: echo "${{ secrets.SSH_KEY }}" > ssh-key.pem && cat ssh-key.pem
+    - name: Create SSH key
+      run: echo "${{ secrets.SSH_KEY }}" > ssh-key.pem && cat ssh-key.pem
 
-      - name: update permission
-        run: chmod 400 ssh-key.pem
+    - name: Update permission
+      run: chmod 400 ssh-key.pem
 
-      - name: Deploy to GCP
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_STATIC_IP }} "
-            sudo docker container rm -f ${{ secrets.CONTAINER_NAME }} || true &&
-            sudo docker image rm -f ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }} || true &&
-            sudo docker run --name ${{ secrets.CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }}"
+    - name: Deploy to GCP
+      run: |
+        REMOTE_CMD="ssh -o StrictHostKeyChecking=no -i ssh-key.pem ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_STATIC_IP }}"
+
+        # Ensure Docker is installed and accessible
+        $REMOTE_CMD "command -v docker || (curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh)"
+
+        # Copy files to the remote server
+        scp -o StrictHostKeyChecking=no -i ssh-key.pem -r ./docker-compose.yml ./monitoring ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_STATIC_IP }}:~/
+        
+        # Execute remote commands via SSH
+        $REMOTE_CMD << EOF
+          sudo docker container rm -f ${{ secrets.CONTAINER_NAME }} || true &&
+          sudo docker image rm -f ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }} || true &&
+          sudo docker run --name ${{ secrets.CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }}
+        EOF
+
