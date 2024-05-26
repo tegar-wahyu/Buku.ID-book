@@ -47,6 +47,20 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/main'
     needs: build
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: paulmuaddib
+          POSTGRES_DB: book
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -67,7 +81,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h localhost -p 5432 -U postgres; then
+              echo "PostgreSQL is up and running"
+              break
+            fi
+            echo "Waiting for PostgreSQL..."
+            sleep 1
+          done
+          if ! pg_isready -h localhost -p 5432 -U postgres; then
+            echo "PostgreSQL failed to start" && exit 1
+          fi
+
       - name: Test with Gradle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/book
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: paulmuaddib
         run: |
           ./gradlew check --info --stacktrace
           ./gradlew test
