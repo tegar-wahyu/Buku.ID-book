@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class BookTest {
+class BookTest {
     BookBuilder bookBuilder = new BookBuilder();
 
     Book book1;
@@ -21,7 +21,7 @@ public class BookTest {
     Date date2 = new Date();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         book1 =
                 bookBuilder.setIdBook(1)
                 .setTitle("Sampo Cap Bambang")

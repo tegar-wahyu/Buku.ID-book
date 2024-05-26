@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class BookBuilderTest {
+class BookBuilderTest {
     private BookBuilder bookBuilder;
     Date date1 = new Date();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         bookBuilder = new BookBuilder();
     }
 

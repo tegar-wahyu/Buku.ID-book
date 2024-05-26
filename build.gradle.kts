@@ -31,21 +31,26 @@ repositories {
 	mavenCentral()
 }
 
+var datafakerVersion = "1.5.0"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	compileOnly("org.projectlombok:lombok")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-	annotationProcessor("org.projectlombok:lombok")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("com.h2database:h2")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("net.datafaker:datafaker:1.5.0")
-	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("net.datafaker:datafaker:$datafakerVersion")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("com.h2database:h2")
+
+	runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+	compileOnly("org.projectlombok:lombok")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+	annotationProcessor("org.projectlombok:lombok")
 }
 
 tasks.register<Test>("unitTest") {
