@@ -65,6 +65,12 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Test with Gradle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/book
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: paulmuaddib
         run: |
           ./gradlew check --info --stacktrace
           ./gradlew test
