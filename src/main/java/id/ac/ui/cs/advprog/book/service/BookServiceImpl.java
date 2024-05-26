@@ -84,4 +84,11 @@ public class BookServiceImpl implements BookService {
             return CompletableFuture.completedFuture(null);
         }
     }
+
+    @Override
+    @Async
+    public CompletableFuture<Void> decreaseStock(int idBook) {
+        bookRepository.decrementStockByIdBook(idBook);
+        return CompletableFuture.completedFuture(null);
+    }
 }

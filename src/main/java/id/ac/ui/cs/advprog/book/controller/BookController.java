@@ -65,4 +65,18 @@ public class BookController {
                         new ResponseEntity<>(editedBook, HttpStatus.OK) :
                         new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @PutMapping("/decreaseStock/{id}")
+    public CompletableFuture<ResponseEntity<String>> decreaseStock(@PathVariable("id") int idBook) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                bookService.decreaseStock(idBook);
+                return new ResponseEntity<>("Stock of book with id " + idBook + " has been decreased", HttpStatus.OK);
+            } catch (NoSuchElementException e) {
+                return new ResponseEntity<>("Book with id " + idBook + " not found", HttpStatus.NOT_FOUND);
+            } catch (Exception e) {
+                return new ResponseEntity<>("Failed to decrease stock of book with id " + idBook, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        });
+    }
 }

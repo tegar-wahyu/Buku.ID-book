@@ -33,7 +33,7 @@ class SeedServiceTest {
     void testSeed() {
         Faker faker = new Faker(new Locale("id_ID"));
 
-        int numberOfBooks = 1000;
+        int numberOfBooks = 100;
 
         seedService.seed();
 

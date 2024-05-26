@@ -15,7 +15,7 @@
  public class SeedService {
      @Autowired
      private BookRepository bookRepository;
-     private static final int NUMBER_OF_BOOK = 1000;
+     private static final int NUMBER_OF_BOOK = 100;
 
      public void seed() {
          @SuppressWarnings("deprecation")
