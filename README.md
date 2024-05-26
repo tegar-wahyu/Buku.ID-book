@@ -7,6 +7,9 @@
 # Buku.ID-book
 
 [![](https://github.com/TK-Advance-Programming-A7/Buku.ID-book/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/TK-Advance-Programming-A7/Buku.ID-book/actions/workflows/ci-cd.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=tk-a7-adpro_book&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=tk-a7-adpro_book)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=tk-a7-adpro_book&metric=coverage)](https://sonarcloud.io/summary/new_code?id=tk-a7-adpro_book)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=tk-a7-adpro_book&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=tk-a7-adpro_book)
 
 Buku.ID-book is a crucial component of the Buku.ID e-commerce platform. This service dedicated to managing all book-related functionalities including cataloging, book details, and inventory management.
 

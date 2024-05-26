@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.book.model;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 
