@@ -29,7 +29,6 @@ class SeedServiceTest {
 
     @Test
     void testSeed() {
-        Faker faker = new Faker(new Locale("id_ID"));
 
         int numberOfBooks = 100;
         seedService.seed();
