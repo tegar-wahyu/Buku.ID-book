@@ -53,3 +53,4 @@ Access the service here: [Buku.ID-book Deployment](http://34.168.74.25)
 
 --------------------------------------------------------------------------------------------
 *© Kelompok A7, Fakultas Ilmu Komputer, Universitas Indonesia - 2023/2024*
+
