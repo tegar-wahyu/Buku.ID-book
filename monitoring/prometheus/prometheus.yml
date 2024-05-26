@@ -1,8 +1,8 @@
 scrape_configs:
-  - job_name: 'MyAppMetrics'
+  - job_name: 'BookMetrics'
     metrics_path: '/actuator/prometheus'
     scrape_interval: 3s
     static_configs:
-      - targets: ['host.docker.internal:8080']
+      - targets: ['34.168.74.25:80','host.docker.internal:80']
         labels:
-          application: 'BUKU.id-book'
+          application: 'book'
