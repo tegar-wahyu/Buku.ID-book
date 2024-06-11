@@ -141,32 +141,20 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-  
+
       - name: Install SSH client
         run: sudo apt-get install openssh-client
-  
-      - name: Create SSH key
+
+      - name: create ssh key
         run: echo "${{ secrets.SSH_KEY }}" > ssh-key.pem && cat ssh-key.pem
-  
-      - name: Update permission
+
+      - name: update permission
         run: chmod 400 ssh-key.pem
-  
+
       - name: Deploy to GCP
         run: |
-          REMOTE_CMD="ssh -o StrictHostKeyChecking=no -i ssh-key.pem ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_STATIC_IP }}"
-  
-          # Ensure Docker and Docker Compose are installed and accessible
-          $REMOTE_CMD "command -v docker || (curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh)"
-          $REMOTE_CMD "command -v docker-compose || (sudo apt update && sudo apt install -y docker-compose)"
-          
-          # Copy files to the remote server
           scp -o StrictHostKeyChecking=no -i ssh-key.pem -r ./docker-compose.yml ./monitoring ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_STATIC_IP }}:~/
-          
-          # Execute remote commands via SSH
-          $REMOTE_CMD << EOF
-            sudo docker-compose down || true
-            sudo docker-compose pull
-            sudo docker-compose up -d
-          EOF
-
-
+          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ${{ secrets.GCP_USERNAME }}@${{ secrets.GCP_STATIC_IP }} "
+            sudo docker container rm -f ${{ secrets.CONTAINER_NAME }} || true &&
+            sudo docker image rm -f ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }} || true &&
+            sudo docker run --name ${{ secrets.CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.REGISTRY_USER }}/${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }}"
